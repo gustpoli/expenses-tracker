@@ -8,6 +8,8 @@ import expenses_tracker.dao.ExpenseDAO;
 import expenses_tracker.model.Expense;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
@@ -15,7 +17,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-public class PrimaryController {
+public class ExpensesController {
 
     @FXML
     private TableColumn<Expense, String> categoryColumn;
@@ -40,12 +42,12 @@ public class PrimaryController {
 
     @FXML
     void onAddAction(ActionEvent event) throws IOException  {
-        App.setRoot("secondary");
+        App.setRoot("addExpense");
     }
 
     
     @FXML
-    void onEditAction(ActionEvent event) {
+    void onEditAction(ActionEvent event) throws IOException {
         Expense selectedExpense = expensesTable.getSelectionModel().getSelectedItem();
         if(selectedExpense == null) {
             Alert successAlert = new Alert(AlertType.INFORMATION);
@@ -55,6 +57,14 @@ public class PrimaryController {
             successAlert.showAndWait();
             return;
         }
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("updateExpense.fxml"));
+        Parent root = loader.load();
+    
+        UpdateExpenseController controller = loader.getController();
+        controller.setExpense(selectedExpense);
+    
+        App.getPrimaryStage().getScene().setRoot(root);
     }
     
     @FXML
@@ -92,7 +102,7 @@ public class PrimaryController {
         valueColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
-        categoryColumn.setCellValueFactory(new PropertyValueFactory<>("categoryId"));
+        categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
 
         ExpenseDAO expenseDAO = new ExpenseDAO();
         expensesTable.getItems().addAll(expenseDAO.getAll());

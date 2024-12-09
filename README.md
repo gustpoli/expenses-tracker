@@ -33,5 +33,3 @@ O aplicativo tem como objetivo centralizar e organizar informações de despesas
 Os testes são escritos usando JUnit. Para executar os testes, use o seguinte comando: mvn test
 
 **OBS1**: Os ícones não são suportados pelo console e provavelmente aparecerão como '?', mas na interface aparecem "corretamente". No banco são armazenados e aparecem corretamente.
-**OBS2**: Por algum motivo não consegui executar os testes das classes DAOs com o mvn test, estavam sendo ignorados. Consegui apenas executando os arquivos diretamente.
-**OBS3**: O teste getAllTest() da classe CategoryDAOTest.java apenas está retornando true apenas quando não há cadastros de categorias, pois os desconsidera. 

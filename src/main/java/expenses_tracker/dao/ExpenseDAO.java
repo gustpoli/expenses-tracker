@@ -10,6 +10,7 @@ import java.util.List;
 import java.time.LocalDate;
 
 import expenses_tracker.db.DatabaseConnection;
+import expenses_tracker.model.Category;
 import expenses_tracker.model.Expense;
 
 public class ExpenseDAO implements DAO<Expense> {
@@ -32,7 +33,7 @@ public class ExpenseDAO implements DAO<Expense> {
       stmt.setBigDecimal(1, expense.getValue()); 
       stmt.setString(2, expense.getDescription()); 
       stmt.setDate(3, Date.valueOf(expense.getDate())); 
-      stmt.setInt(4, expense.getCategoryId()); 
+      stmt.setInt(4, expense.getCategory().getId()); 
       int affectedRows = stmt.executeUpdate();
       if(affectedRows > 0)
         try(ResultSet generatedKeys = stmt.getGeneratedKeys()){
@@ -51,13 +52,12 @@ public class ExpenseDAO implements DAO<Expense> {
   @Override
   public boolean update(Expense expense){
     String query = "UPDATE expenses SET value = ?, description = ?, date = ?, category_id = ? WHERE id = ?";
-    System.out.println("ID:" + expense.getId());
 
     try(PreparedStatement stmt = connection.prepareStatement(query)) {
       stmt.setBigDecimal(1, expense.getValue()); 
       stmt.setString(2, expense.getDescription()); 
       stmt.setDate(3, Date.valueOf(expense.getDate())); 
-      stmt.setInt(4, expense.getCategoryId()); 
+      stmt.setInt(4, expense.getCategory().getId()); 
       stmt.setInt(5, expense.getId()); 
       return stmt.executeUpdate() > 0;
     } catch (SQLException e) {
@@ -109,18 +109,24 @@ public class ExpenseDAO implements DAO<Expense> {
 
   @Override
   public Expense get(int id){
-    String query = "SELECT * FROM expenses WHERE id = ?";
+    String query = "SELECT e.id, e.value, e.description, e.date, c.id AS category_id, c.name AS category_name, c.icon AS category_icon FROM expenses e INNER JOIN categories c ON e.category_id = c.id WHERE e.id = ?;"; 
 
     try(PreparedStatement stmt = connection.prepareStatement(query)) {
       stmt.setInt(1, id);
       ResultSet rs = stmt.executeQuery();
       if(rs.next()){
+        System.out.println(id);
+        System.out.println(rs.getInt("id"));
         return new Expense(
           rs.getInt("id"),
           rs.getBigDecimal("value"),
           rs.getString("description"),
           rs.getDate("date").toLocalDate(),
-          rs.getInt("category_id")
+          new Category(
+            rs.getInt("category_id"), 
+            rs.getString("category_name"), 
+            rs.getString("category_icon")
+          )
         );
       }
     } catch (SQLException e) {
@@ -134,7 +140,7 @@ public class ExpenseDAO implements DAO<Expense> {
   @Override
   public List<Expense> getAll(){
     List<Expense> expenses = new ArrayList<>();
-    String query = "SELECT * FROM expenses";
+    String query = "SELECT e.id, e.value, e.description, e.date, c.id AS category_id, c.name AS category_name, c.icon AS category_icon FROM expenses e INNER JOIN categories c ON e.category_id = c.id ORDER BY date DESC";
 
     try(PreparedStatement stmt = connection.prepareStatement(query)) {
       ResultSet rs = stmt.executeQuery();
@@ -144,7 +150,11 @@ public class ExpenseDAO implements DAO<Expense> {
           rs.getBigDecimal("value"),
           rs.getString("description"),
           rs.getDate("date").toLocalDate(),
-          rs.getInt("category_id")
+          new Category(
+            rs.getInt("category_id"), 
+            rs.getString("category_name"), 
+            rs.getString("category_icon")
+          )
         ));
       }
     } catch (SQLException e) {
@@ -157,7 +167,7 @@ public class ExpenseDAO implements DAO<Expense> {
 
   public List<Expense> getByCategory(int id){
     List<Expense> expenses = new ArrayList<>();
-    String query = "SELECT * FROM expenses WHERE category_id = ?";
+    String query = "SELECT e.id, e.value, e.description, e.date, c.id AS category_id, c.name AS category_name, c.icon AS category_icon FROM expenses e INNER JOIN categories c ON e.category_id = c.id WHERE category_id = ? ORDER BY c.name ASC";
 
     try(PreparedStatement stmt = connection.prepareStatement(query)) {
       stmt.setInt(1, id);
@@ -168,7 +178,11 @@ public class ExpenseDAO implements DAO<Expense> {
           rs.getBigDecimal("value"),
           rs.getString("description"),
           rs.getDate("date").toLocalDate(),
-          rs.getInt("category_id")
+          new Category(
+            rs.getInt("category_id"), 
+            rs.getString("category_name"), 
+            rs.getString("category_icon")
+          )        
         ));
       }
     } catch (SQLException e) {
@@ -181,7 +195,7 @@ public class ExpenseDAO implements DAO<Expense> {
 
   public List<Expense> getWithinDateRange(LocalDate start, LocalDate end){
     List<Expense> expenses = new ArrayList<>();
-    String query = "SELECT * FROM expenses WHERE date BETWEEN ? AND ?";
+    String query = "SELECT e.id, e.value, e.description, e.date, c.id AS category_id, c.name AS category_name, c.icon AS category_icon FROM expenses e INNER JOIN categories c ON e.category_id = c.id WHERE date BETWEEN ? AND ? ORDER BY date ASC";
 
     try(PreparedStatement stmt = connection.prepareStatement(query)) {
       stmt.setDate(1, Date.valueOf(start));
@@ -193,7 +207,11 @@ public class ExpenseDAO implements DAO<Expense> {
           rs.getBigDecimal("value"),
           rs.getString("description"),
           rs.getDate("date").toLocalDate(),
-          rs.getInt("category_id")
+          new Category(
+            rs.getInt("category_id"), 
+            rs.getString("category_name"), 
+            rs.getString("category_icon")
+          )
         ));
       }
     } catch (SQLException e) {
@@ -206,7 +224,7 @@ public class ExpenseDAO implements DAO<Expense> {
 
   public List<Expense> list(int limit, int offset){
     List<Expense> expenses = new ArrayList<>();
-    String query = "SELECT * FROM expenses LIMIT ? OFFSET ?";
+    String query = "SELECT e.id, e.value, e.description, e.date, c.id AS category_id, c.name AS category_name, c.icon AS category_icon FROM expenses e INNER JOIN categories c ON e.category_id = c.id ORDER BY date DESC LIMIT ? OFFSET ?";
 
     try(PreparedStatement stmt = connection.prepareStatement(query)) {
       stmt.setInt(1, limit);
@@ -218,7 +236,11 @@ public class ExpenseDAO implements DAO<Expense> {
           rs.getBigDecimal("value"),
           rs.getString("description"),
           rs.getDate("date").toLocalDate(),
-          rs.getInt("category_id")
+          new Category(
+            rs.getInt("category_id"), 
+            rs.getString("category_name"), 
+            rs.getString("category_icon")
+          )
         ));
       }
     } catch (SQLException e) {

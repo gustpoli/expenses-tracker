@@ -55,7 +55,7 @@ public class CategoryTest {
   @Test
   public void testToString() {
     Category category = new Category(1, "Food", "🍱");
-    assertEquals("Category{id=1, name='Food', icon='🍱'}", category.toString());
+    assertEquals("🍱 Food", category.toString());
   }
 
   @SuppressWarnings("unlikely-arg-type")

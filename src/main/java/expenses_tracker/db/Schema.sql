@@ -1,3 +1,8 @@
+/*
+ALTER SEQUENCE categories_id_seq RESTART WITH 1;
+ALTER SEQUENCE expenses_id_seq RESTART WITH 1;
+*/
+
 CREATE TABLE categories (
   id SERIAL,
   name VARCHAR(100) NOT NULL,

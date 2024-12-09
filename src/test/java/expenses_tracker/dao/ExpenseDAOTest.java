@@ -25,8 +25,8 @@ class ExpenseDAOTest {
   @Test
   void testDeleteAll() {
     Category category = createCategory("Food", "🍔");
-    expenseDAO.insert(new Expense(-1, BigDecimal.valueOf(100), "Groceries", LocalDate.now(), category.getId()));
-    expenseDAO.insert(new Expense(-1, BigDecimal.valueOf(50), "Transport", LocalDate.now(), category.getId()));
+    expenseDAO.insert(new Expense(-1, BigDecimal.valueOf(100), "Groceries", LocalDate.now(), category));
+    expenseDAO.insert(new Expense(-1, BigDecimal.valueOf(50), "Transport", LocalDate.now(), category));
     assertTrue(expenseDAO.deleteAll());
     List<Expense> expenses = expenseDAO.getAll();
     assertEquals(0, expenses.size());
@@ -36,7 +36,7 @@ class ExpenseDAOTest {
   @Test
   void testInsert() {
     Category category = createCategory("Food", "🍔");
-    Expense expense = new Expense(-1, BigDecimal.valueOf(100), "Groceries", LocalDate.now(), category.getId());
+    Expense expense = new Expense(-1, BigDecimal.valueOf(100), "Groceries", LocalDate.now(), category);
     assertTrue(expenseDAO.insert(expense));
     expenseDAO.delete(expense.getId());
     categoryDAO.delete(category.getId());
@@ -45,9 +45,9 @@ class ExpenseDAOTest {
   @Test
   void testUpdate() {
     Category category = createCategory("Food", "🍔");
-    Expense expense = new Expense(-1, BigDecimal.valueOf(100), "Groceries", LocalDate.now(), category.getId());
+    Expense expense = new Expense(-1, BigDecimal.valueOf(100), "Groceries", LocalDate.now(), category);
     expenseDAO.insert(expense);
-    Expense updatedExpense = new Expense(expense.getId(), BigDecimal.valueOf(150), "Supermarket", LocalDate.now(), category.getId());
+    Expense updatedExpense = new Expense(expense.getId(), BigDecimal.valueOf(150), "Supermarket", LocalDate.now(), category);
     assertTrue(expenseDAO.update(updatedExpense));
     Expense retrievedExpense = expenseDAO.get(expense.getId());
     assertNotNull(retrievedExpense);
@@ -60,7 +60,7 @@ class ExpenseDAOTest {
   @Test
   void testDelete() {
     Category category = createCategory("Food", "🍔");
-    Expense expense = new Expense(-1, BigDecimal.valueOf(100), "Groceries", LocalDate.now(), category.getId());
+    Expense expense = new Expense(-1, BigDecimal.valueOf(100), "Groceries", LocalDate.now(), category);
     expenseDAO.insert(expense);
     assertTrue(expenseDAO.delete(expense.getId()));
     assertNull(expenseDAO.get(expense.getId()));
@@ -70,9 +70,9 @@ class ExpenseDAOTest {
   @Test
   void testeDeleteX(){
     Category category = createCategory("Food", "🍔");
-    Expense expense1 = new Expense(-1, BigDecimal.valueOf(100), "Groceries", LocalDate.now(), category.getId());
-    Expense expense2 = new Expense(-1, BigDecimal.valueOf(100), "Groceries", LocalDate.now(), category.getId());
-    Expense expense3 = new Expense(-1, BigDecimal.valueOf(100), "Groceries", LocalDate.now(), category.getId());
+    Expense expense1 = new Expense(-1, BigDecimal.valueOf(100), "Groceries", LocalDate.now(), category);
+    Expense expense2 = new Expense(-1, BigDecimal.valueOf(100), "Groceries", LocalDate.now(), category);
+    Expense expense3 = new Expense(-1, BigDecimal.valueOf(100), "Groceries", LocalDate.now(), category);
     expenseDAO.insert(expense1);
     expenseDAO.insert(expense2);
     expenseDAO.insert(expense3);
@@ -86,8 +86,8 @@ class ExpenseDAOTest {
   @Test
   void testGetAll() {
     Category category = createCategory("Food", "🍔");
-    expenseDAO.insert(new Expense(-1, BigDecimal.valueOf(100), "Groceries", LocalDate.now(), category.getId()));
-    expenseDAO.insert(new Expense(-1, BigDecimal.valueOf(50), "Transport", LocalDate.now(), category.getId()));
+    expenseDAO.insert(new Expense(-1, BigDecimal.valueOf(100), "Groceries", LocalDate.now(), category));
+    expenseDAO.insert(new Expense(-1, BigDecimal.valueOf(50), "Transport", LocalDate.now(), category));
     List<Expense> expenses = expenseDAO.getAll();
     assertEquals(2, expenses.size());
     for (Expense exp : expenses) {
@@ -99,7 +99,7 @@ class ExpenseDAOTest {
   @Test
   void testGet() {
     Category category = createCategory("Food", "🍔");
-    Expense expense = new Expense(-1, BigDecimal.valueOf(100), "Groceries", LocalDate.now(), category.getId());
+    Expense expense = new Expense(BigDecimal.valueOf(100), "Groceries", LocalDate.now(), category);
     expenseDAO.insert(expense);
     Expense retrievedExpense = expenseDAO.get(expense.getId());
     assertNotNull(retrievedExpense);
@@ -112,8 +112,8 @@ class ExpenseDAOTest {
   @Test
   void testGetByCategory() {
     Category category = createCategory("Food", "🍔");
-    Expense expense1 = new Expense(-1, BigDecimal.valueOf(100), "Groceries", LocalDate.now(), category.getId());
-    Expense expense2 = new Expense(-1, BigDecimal.valueOf(50), "Transport", LocalDate.now(), category.getId());
+    Expense expense1 = new Expense(-1, BigDecimal.valueOf(100), "Groceries", LocalDate.now(), category);
+    Expense expense2 = new Expense(-1, BigDecimal.valueOf(50), "Transport", LocalDate.now(), category);
     expenseDAO.insert(expense1);
     expenseDAO.insert(expense2);
     List<Expense> expenses = expenseDAO.getByCategory(category.getId());
@@ -126,8 +126,8 @@ class ExpenseDAOTest {
   @Test
   void testGetWithinDateRange() {
     Category category = createCategory("Food", "🍔");
-    Expense expense1 = new Expense(-1, BigDecimal.valueOf(100), "Groceries", LocalDate.now(), category.getId());
-    Expense expense2 = new Expense(-1, BigDecimal.valueOf(50), "Transport", LocalDate.now().minusDays(1), category.getId());
+    Expense expense1 = new Expense(-1, BigDecimal.valueOf(100), "Groceries", LocalDate.now(), category);
+    Expense expense2 = new Expense(-1, BigDecimal.valueOf(50), "Transport", LocalDate.now().minusDays(1), category);
     expenseDAO.insert(expense1);
     expenseDAO.insert(expense2);
     List<Expense> expenses = expenseDAO.getWithinDateRange(LocalDate.now().minusDays(2), LocalDate.now());
@@ -140,8 +140,8 @@ class ExpenseDAOTest {
   @Test
   void testList() {
     Category category = createCategory("Food", "🍔");
-    Expense expense1 = new Expense(-1, BigDecimal.valueOf(100), "Groceries", LocalDate.now(), category.getId());
-    Expense expense2 = new Expense(-1, BigDecimal.valueOf(50), "Transport", LocalDate.now(), category.getId());
+    Expense expense1 = new Expense(-1, BigDecimal.valueOf(100), "Groceries", LocalDate.now(), category);
+    Expense expense2 = new Expense(-1, BigDecimal.valueOf(50), "Transport", LocalDate.now(), category);
     expenseDAO.insert(expense1);
     expenseDAO.insert(expense2);
     List<Expense> expenses = expenseDAO.list(1, 0);

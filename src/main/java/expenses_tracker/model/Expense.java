@@ -10,22 +10,22 @@ public class Expense {
   private BigDecimal value;
   private String description;
   private LocalDate date;
-  private int categoryId;
+  private Category category;
   
-  public Expense(int id, BigDecimal value, String description, LocalDate date, int categoryId){
+  public Expense(int id, BigDecimal value, String description, LocalDate date, Category category){
     this.id = id;
     this.value = value;
     this.description = description;
     this.date = date;
-    this.categoryId = categoryId;
+    this.category = category;
   }
 
-  public Expense(BigDecimal value, String description, LocalDate date, int categoryId){
+  public Expense(BigDecimal value, String description, LocalDate date, Category category){
     this.id = 0;
     this.value = value;
     this.description = description;
     this.date = date;
-    this.categoryId = categoryId;
+    this.category = category;
   }
 
   public int getId() {
@@ -60,17 +60,17 @@ public class Expense {
     this.date = date;
   }
 
-  public int getCategoryId() {
-    return categoryId;
+  public Category getCategory() {
+    return category;
   }
 
-  public void setCategoryId(int categoryId) {
-    this.categoryId = categoryId;
+  public void setCategory(Category category) {
+    this.category = category;
   }
 
   @Override
   public String toString() {
-    return "Expense{id=" + id + ", value=" + value + ", description='" + description + "', date=" + date + ", categoryId=" + categoryId + "}";
+    return "Expense{id=" + id + ", value=" + value + ", description='" + description + "', date=" + date + ", category='" + category.toString() + "'}";
   }
 
   @Override
@@ -80,7 +80,7 @@ public class Expense {
     Expense expense = (Expense) obj;
     return (
       id == expense.id &&
-      categoryId == expense.categoryId &&
+      category.equals(expense.category) &&
       Objects.equals(value, expense.value) &&
       Objects.equals(description, expense.description) &&
       Objects.equals(date, expense.date)

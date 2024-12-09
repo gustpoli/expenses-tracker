@@ -17,6 +17,15 @@ public class Category {
     this.icon = icon;
   }
 
+  public Category(String name, String icon){
+    if (name == null || name.isEmpty()) throw new IllegalArgumentException("Name cannot be null or empty");
+    if (icon == null || icon.isEmpty()) throw new IllegalArgumentException("Icon cannot be null or empty");
+
+    this.id = 0;
+    this.name = name;
+    this.icon = icon;
+  }
+
   public int getId() {
     return id;
   }

@@ -19,7 +19,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 
-public class SecondaryController {
+public class AddExpenseController {
 
     @FXML
     private Button backButton;
@@ -41,7 +41,7 @@ public class SecondaryController {
 
     @FXML
     void onBackButtonAction(ActionEvent event) throws IOException {
-        App.setRoot("primary");
+      App.setRoot("expenses");
     }
 
     @FXML
@@ -79,7 +79,7 @@ public class SecondaryController {
             return;        
         }
 
-        Expense newExpense = new Expense(expenseValue, descriptionFieldValue, dateFieldValue, categorySelected.getId());
+        Expense newExpense = new Expense(expenseValue, descriptionFieldValue, dateFieldValue, categorySelected);
 
         ExpenseDAO expenseDAO = new ExpenseDAO();
         if(!expenseDAO.insert(newExpense)){
@@ -97,7 +97,7 @@ public class SecondaryController {
         successAlert.setContentText("Despesa criada com sucesso!");
         successAlert.setOnCloseRequest(e -> {
             try {
-                App.setRoot("primary");
+                App.setRoot("expenses");
             } catch (IOException error) {
                 error.printStackTrace();
             }

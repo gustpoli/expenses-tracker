@@ -46,6 +46,7 @@
                   <HBox alignment="TOP_RIGHT" spacing="4.0" HBox.hgrow="ALWAYS">
                      <children>
                         <Button fx:id="categoriesButton" mnemonicParsing="false" onAction="#onCategoriesButtonAction" text="Gerenciar categorias" />
+                        <Button fx:id="reportButton" mnemonicParsing="false" onAction="#onReportButtonAction" text="Ver relatórios" />
                      </children>
                   </HBox>
                </children>

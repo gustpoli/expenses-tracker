@@ -74,7 +74,7 @@ public class CategoriesController {
             Alert successAlert = new Alert(AlertType.INFORMATION);
             successAlert.setTitle("Alerta");
             successAlert.setHeaderText(null);
-            successAlert.setContentText("Nenhuma despesa selecionada.");
+            successAlert.setContentText("Nenhuma categoria selecionada.");
             successAlert.showAndWait();
             return;
         }
@@ -84,7 +84,7 @@ public class CategoriesController {
             Alert successAlert = new Alert(AlertType.ERROR);
             successAlert.setTitle("Erro");
             successAlert.setHeaderText(null);
-            successAlert.setContentText("Ops... algo deu errado ao excluir a categoria.");
+            successAlert.setContentText("Ops... algo deu errado ao excluir a categoria. Verifique se não há despesas cadastradas para essa categoria e tente novamente.");
             successAlert.showAndWait();
             return;
         }

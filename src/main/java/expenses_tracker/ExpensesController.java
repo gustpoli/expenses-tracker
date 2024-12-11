@@ -44,6 +44,9 @@ public class ExpensesController {
     private TableColumn<Expense, BigDecimal> valueColumn;
 
     @FXML
+    private Button reportButton;
+
+    @FXML
     void onAddAction(ActionEvent event) throws IOException  {
         App.setRoot("addExpense");
     }
@@ -102,6 +105,11 @@ public class ExpensesController {
     @FXML
     void onCategoriesButtonAction(ActionEvent event) throws IOException{
         App.setRoot("categories");
+    }
+
+    @FXML
+    void onReportButtonAction(ActionEvent event) throws IOException {
+        App.setRoot("reports");
     }
 
     public void initialize(){

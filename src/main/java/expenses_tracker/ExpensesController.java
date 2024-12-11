@@ -36,6 +36,9 @@ public class ExpensesController {
 
     @FXML
     private Button addButton;
+    
+    @FXML
+    private Button categoriesButton;
 
     @FXML
     private TableColumn<Expense, BigDecimal> valueColumn;
@@ -45,7 +48,6 @@ public class ExpensesController {
         App.setRoot("addExpense");
     }
 
-    
     @FXML
     void onEditAction(ActionEvent event) throws IOException {
         Expense selectedExpense = expensesTable.getSelectionModel().getSelectedItem();
@@ -95,6 +97,11 @@ public class ExpensesController {
         successAlert.setHeaderText(null);
         successAlert.setContentText("Despesa excluida com sucesso!");
         successAlert.showAndWait();
+    }
+
+    @FXML
+    void onCategoriesButtonAction(ActionEvent event) throws IOException{
+        App.setRoot("categories");
     }
 
     public void initialize(){
